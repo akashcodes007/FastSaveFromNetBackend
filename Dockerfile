@@ -4,7 +4,9 @@ ENV PATH="$PNPM_HOME:$PATH"
 
 FROM base AS build
 WORKDIR /app
-COPY . /app
+
+# Only copy necessary files for build (avoid unnecessary files like .git)
+COPY package.json pnpm-lock.yaml /app/
 
 RUN corepack enable
 RUN apk add --no-cache python3 alpine-sdk
@@ -17,9 +19,11 @@ RUN pnpm deploy --filter=@imput/cobalt-api --prod /prod/api
 FROM base AS api
 WORKDIR /app
 
+# Copy the built files (from the build stage) to the final image
 COPY --from=build --chown=node:node /prod/api /app
 
 USER node
 
 EXPOSE 9000
+
 CMD [ "node", "src/cobalt" ]

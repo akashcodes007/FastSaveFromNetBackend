@@ -14,13 +14,17 @@ RUN apk add --no-cache python3 alpine-sdk
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --prod --frozen-lockfile
 
-RUN pnpm deploy --filter=@imput/cobalt-api --prod /prod/api
+# Run the build step and output to a known directory
+RUN pnpm deploy --filter=@imput/cobalt-api --prod /app/prod/api
+
+# Add debugging to check output location
+RUN ls -R /app/prod/
 
 FROM base AS api
 WORKDIR /app
 
-# Copy the built files (from the build stage) to the final image
-COPY --from=build --chown=node:node /prod/api /app
+# Update this to the correct output path from the build step
+COPY --from=build --chown=node:node /app/prod/api /app
 
 USER node
 

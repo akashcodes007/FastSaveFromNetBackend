@@ -30,4 +30,4 @@ USER node
 
 EXPOSE 9000
 
-CMD [ "node", "FastSaveFromNetBackend/api/src/cobalt" ]
+CMD [ "node", "/src/cobalt" ]

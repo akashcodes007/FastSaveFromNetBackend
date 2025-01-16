@@ -5,7 +5,7 @@ ENV PATH="$PNPM_HOME:$PATH"
 FROM base AS build
 WORKDIR /app
 
-# Only copy necessary files for build (avoid unnecessary files like .git)
+# Only copy necessary files for build
 COPY package.json pnpm-lock.yaml /app/
 
 RUN corepack enable
@@ -14,17 +14,17 @@ RUN apk add --no-cache python3 alpine-sdk
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
     pnpm install --prod --frozen-lockfile
 
-# Run the build step and output to a known directory
-RUN pnpm deploy --filter=@imput/cobalt-api --prod /app/prod/api
+# Run the deploy command without specifying the output directory
+RUN pnpm deploy --filter=@imput/cobalt-api --prod
 
-# Add debugging to check output location
-RUN ls -R /app/prod/
+# Debugging to check where files are output
+RUN ls -R /app
 
 FROM base AS api
 WORKDIR /app
 
-# Update this to the correct output path from the build step
-COPY --from=build --chown=node:node /app/prod/api /app
+# Update the copy step according to the correct path
+COPY --from=build --chown=node:node /app /app
 
 USER node
 

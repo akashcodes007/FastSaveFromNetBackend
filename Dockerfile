@@ -30,4 +30,4 @@ USER node
 
 EXPOSE 9000
 
-CMD [ "node", "src/cobalt.js" ]
+CMD [ "node", "api/src/cobalt" ]

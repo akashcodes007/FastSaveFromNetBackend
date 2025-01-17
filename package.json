@@ -1,7 +1,18 @@
 {
-    "name": "cobalt",
-    "packageManager": "pnpm@9.6.0",
-    "engines": {
-        "pnpm": ">=9"
-    }
+  "name": "cobalt",
+  "version": "1.0.0",
+  "packageManager": "pnpm@9.6.0",
+  "engines": {
+    "pnpm": ">=9"
+  },
+  "scripts": {
+    "start": "node src/cobalt.js",
+    "predeploy": "pnpm install --no-frozen-lockfile"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.17.1",
+    "@imput/version-info": "^1.0.0" 
+  },
+  "type": "module"
 }
